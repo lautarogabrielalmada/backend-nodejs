@@ -1,9 +1,9 @@
 import express from "express";
-	import ProductManager from "../app/productManager.js";
+import ProductManager from "./productManager.js";
 	
 
-	const item = new ProductManager();
-	const app = express();
+const item = new ProductManager('./src/products.json');
+const app = express();
 	
 
 	//params
@@ -16,12 +16,13 @@ import express from "express";
 
 	if(!limit){
 	    const prods = await item.getProducts(); 
-	    await res.send(prods);
+		console.log(prods);
+	     res.send(prods);
 	    }
 	    //envia el filtrado de el numero de datos
 	    const prods = await item.getProducts();
 	    const filtered = prods.splice(0,limit);
-	    await res.send(filtered);
+		 res.send(filtered);
 	});
 	
 
@@ -29,7 +30,7 @@ import express from "express";
 	app.get("/products/:id", async (req,res) => {
 	    const prodId = await Number(req.params.id);
 	    const result = await item.getProductById(prodId);
-	    await res.send(result);
+	    res.send(result);
 	})
 	
 
@@ -45,4 +46,5 @@ import express from "express";
 
 
 //http://localhost:8080/bienvenida
+
 
