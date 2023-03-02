@@ -1,50 +1,27 @@
-import express from "express";
-import ProductManager from "./productManager.js";
+import express, { json } from "express"
+import ProductManager from "./managers/ProductManager.js";
+import productsRouter from "./routes/products-router.js";
+import CartManager from "./managers/CartManager.js";
+import cartsRouter from "./routes/carts-router.js";
 	
 
-const item = new ProductManager('./src/products.json');
+const manager = new ProductManager("./src/jsons/products/products.json")
+const cartManager = new CartManager("./src/jsons/carts/cart.json")
+
+
 const app = express();
 	
 
-	//params
-	
+app.use(json())
 
-	//lista de max 3 items
-	app.get("/products", async (req,res) => {
-	    const {limit} = req.query;
-	
+app.use("/api/products", productsRouter)
+app.use("/api/carts", cartsRouter)
 
-	if(!limit){
-	    const prods = await item.getProducts(); 
-		console.log(prods);
-	     res.send(prods);
-	    }
-	    //envia el filtrado de el numero de datos
-	    const prods = await item.getProducts();
-	    const filtered = prods.splice(0,limit);
-		 res.send(filtered);
-	});
-	
+app.listen(8080, ()=>{
+    console.log("Server listening on port 8080.")
+})
 
-	//segun el id
-	app.get("/products/:id", async (req,res) => {
-	    const prodId = await Number(req.params.id);
-	    const result = await item.getProductById(prodId);
-	    res.send(result);
-	})
-	
+export {manager, cartManager}
 
-	//escucha
-	app.listen(8080, () => {
-	console.log("listening 8080");
-	})
-
-    //Give feedback
-
-
-
-
-
-//http://localhost:8080/bienvenida
 
 
